@@ -1,24 +1,30 @@
 # Reproducible Research - Week 2 - Assignment
 
 ### 1. Code for reading the CSV into data set
-```{r loaddata, echo=TRUE}
+
+```r
 ds <- read.csv("activity.csv")
 ```
 
 ### 2. Histogram of the total number of steps
-```{r echo=TRUE}
+
+```r
 total_steps <- tapply(ds$steps, ds$date, FUN=sum, na.rm=TRUE)
 hist(total_steps, xlab = "Steps", col="green", main = "Total Number of steps")
 ```
 
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png)
+
 ### 3. Mean and Median number of steps taken each day
-```{r echo=TRUE}
+
+```r
 mean_steps      <- mean(total_steps,   na.rm = TRUE)
 median_steps    <- median(total_steps, na.rm = TRUE)
 ```
 
 ### 4. Time series plot of the average number of steps taken
-```{r echo=TRUE}
+
+```r
 # Calculate average number of steps by day
 average_steps <- tapply(ds$steps, ds$date, FUN=mean, na.rm=TRUE)
 
@@ -32,8 +38,11 @@ plot(
     main="Average number of steps taken by day"
 )
 ```
+
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
 ### 5. The 5-minute interval that, on average, contains the maximum number of steps
-```{r echo=TRUE}
+
+```r
 average_data <- aggregate(steps ~ interval, data=ds, FUN=mean, na.rm=TRUE)
 plot(
     x=average_data$interval, 
@@ -45,8 +54,11 @@ plot(
 )
 ```
 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
+
 ### 6. Code to describe and show a strategy for imputing missing data
-```{r echo=TRUE}
+
+```r
 # Total number of missing values in the activity data set
 missing_total <- sum(is.na(ds$steps))
 
@@ -55,13 +67,17 @@ ds$steps[is.na(ds$steps)] <- 0
 ```
 
 ### 7.Histogram of the total number of steps taken each day after missing values are imputed
-```{r}
+
+```r
 total_steps <- tapply(ds$steps, ds$date, FUN=sum)
 hist(total_steps, xlab = "Steps", col="red", main = "Total Number of steps")
 ```
 
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+
 ### 8. Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
-```{r}
+
+```r
 # Upload timeDate library to determine weekeday or weekend
 library(timeDate)
 library(lattice)
@@ -76,7 +92,8 @@ ds$dayType <- ifelse(isWeekend(ds$date), "Weekend", "Weekday")
 agg <- aggregate( steps ~ interval + dayType, data=ds, FUN = mean, rm.na = TRUE)
 ```
 
-```{r xyplot, fig.height=4}
+
+```r
 # Plot
 xyplot(
         steps ~ interval | dayType,
@@ -88,4 +105,6 @@ xyplot(
         ylab = "Average number of steps"
 )
 ```
+
+![plot of chunk xyplot](figure/xyplot-1.png)
 
